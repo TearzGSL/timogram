@@ -26,15 +26,15 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(8),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            ContactSearchField(),
-            SizedBox(height: 10),
+            const ContactSearchField(),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView(
-                children: [
+                children: const [
                   UserTile(
                     name: 'Contacto de ejemplo',
                     code: '001',
