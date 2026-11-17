@@ -1,0 +1,43 @@
+name: Analisis de calidad
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  analisis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Dependencias
+        run: flutter pub get
+
+      - name: Analisis estatico (flutter analyze)
+        run: flutter analyze > analyze.txt 2>&1 || true
+
+      - name: Dependencias desactualizadas
+        run: flutter pub outdated > outdated.txt 2>&1 || true
+
+      - name: Pruebas y cobertura
+        run: flutter test --coverage > test.txt 2>&1 || true
+
+      - name: Mostrar resultados en el log
+        run: |
+          echo "===== ANALYZE =====" && cat analyze.txt
+          echo "===== TESTS =====" && cat test.txt
+
+      - name: Guardar reportes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-calidad
+          path: |
+            analyze.txt
+            outdated.txt
+            test.txt
+            coverage/lcov.info
